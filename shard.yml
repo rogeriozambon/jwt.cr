@@ -1,0 +1,9 @@
+name: jwt.cr
+version: 0.1.0
+
+authors:
+  - Rogério Zambon <rogeriozambon@gmail.com>
+
+crystal: 0.23.1
+
+license: MIT
