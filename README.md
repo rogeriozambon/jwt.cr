@@ -24,7 +24,10 @@ adapter = JWT::Adapters::HS256.new("secret")
 payload = {"email" => "john@exmaple.org"}
 
 token = JWT.encode(payload, adapter)
+#=> eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImpvaG5AZXhtYXBsZS5vcmcifQ.c_uGDeYAuC9SP0gOHuV-4OPKO8yoyUtZYpeXboj9zfU
+
 data = JWT.decode(token, adapter)
+#=> {"header" => {"typ" => "JWT", "alg" => "HS256"}, "payload" => {"email" => "john@exmaple.org"}}
 ```
 
 ## Contributors
