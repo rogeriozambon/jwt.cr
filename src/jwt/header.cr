@@ -1,11 +1,11 @@
 module JWT
-	class Header
-		def initialize(@algorithm : String)
-		end
+  class Header
+    def initialize(algorithm : String)
+      @header = { "alg" => algorithm, "typ" => "JWT" }
+    end
 
-		def generate
-			data = Serializer::JSON.encode({ "typ" => "JWT", "alg" => @algorithm })
-			Serializer::B64.encode(data)
-		end
-	end
+    def generate
+      Serializer::B64.encode(Serializer::JSON.encode(@header))
+    end
+  end
 end
