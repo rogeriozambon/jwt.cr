@@ -23,7 +23,7 @@ require "jwt.cr"
 adapter = JWT::Adapters::HS256.new("secret")
 payload = {"email" => "john@exmaple.org"}
 
-token = JWT.encode({"email" => "john@exmaple.org"}, adapter)
+token = JWT.encode(payload, adapter)
 data = JWT.decode(token, adapter)
 ```
 
