@@ -1,7 +1,7 @@
 module JWT
   class Header
-    def initialize(algorithm : String)
-      @header = { "alg" => algorithm, "typ" => "JWT" }
+    def initialize(adapter : AdapterTypes)
+      @header = { "alg" => adapter.to_s, "typ" => "JWT" }
     end
 
     def generate

@@ -5,7 +5,9 @@ module JWT::Claims
 
     def validate
       if @payload.has_key?(key)
-        raise Errors::Audience.new("Invalid audience.") unless @claims[key] == @payload[key]
+        audience = @payload[key].as(Array)
+
+        raise Errors::Audience.new("Invalid audience.") unless audience.includes?(@claims[key])
       end
     rescue KeyError
     end

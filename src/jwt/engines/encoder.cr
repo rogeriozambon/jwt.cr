@@ -4,7 +4,7 @@ module JWT::Engines
     end
 
     def generate
-      header = Header.new(@adapter.to_s)
+      header = Header.new(@adapter)
       payload = Payload.new(@payload)
       signature = @adapter.sign("#{header.generate}.#{payload.generate}")
 

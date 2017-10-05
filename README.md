@@ -60,7 +60,7 @@ JWT.decode(token, adapter)
 #=> {{"alg" => "HS256", "typ" => "JWT"}, {"foo" => "bar", "aud" => ["guest", "visitor"]}}
 ```
 
-When an audience doesn't match with that was passed to payload, an exception (JWT::Errors::Audience) will be thrown.
+When an audience doesn't match with that was passed to payload, an exception (`JWT::Errors::Audience`) will be thrown.
 
 ```crystal
 JWT.decode(token, adapter, {"aud" => "admin"})
@@ -104,7 +104,7 @@ JWT.decode(token, adapter)
 #=> {{"alg" => "HS256", "typ" => "JWT"}, {"foo" => "bar", "iss" => "jwt.cr"}}
 ```
 
-When an issuer doesn't match with that was passed to payload, an exception (JWT::Errors::Issuer) will be thrown.
+When an issuer doesn't match with that was passed to payload, an exception (`JWT::Errors::Issuer`) will be thrown.
 
 ```crystal
 JWT.decode(token, adapter, {"iss" => "jwt"})
@@ -145,7 +145,7 @@ JWT.decode(token, adapter)
 #=> {{"alg" => "HS256", "typ" => "JWT"}, {"foo" => "bar", "sub" => "github"}}
 ```
 
-When a subject doesn't match with that was passed to payload, an exception (JWT::Errors::Subject) will be thrown.
+When a subject doesn't match with that was passed to payload, an exception (`JWT::Errors::Subject`) will be thrown.
 
 ```crystal
 JWT.decode(token, adapter, {"sub" => "gitlab"})
