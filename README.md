@@ -37,6 +37,22 @@ JWT.decode(token, adapter)
 #=> {{"alg" => "HS256", "typ" => "JWT"}, {"foo" => "bar"}}
 ```
 
+#### Middleware
+
+```crystal
+require "jwt"
+require "http/server"
+
+adapter = JWT::Adapters::HS256.new("secret")
+
+server = HTTP::Server.new("0.0.0.0", 8080, [
+  JWT::Middleware.new(adapter)
+])
+
+puts "Listening on 8080 with JWT middleware.."
+server.listen
+```
+
 ## Algorithms
 * [x] None
 * [x] HMAC (HS256, HS384, HS512)
@@ -150,6 +166,16 @@ When a subject doesn't match with that was passed to payload, an exception (`JWT
 ```crystal
 JWT.decode(token, adapter, {"sub" => "gitlab"})
 #=> Invalid subject. (JWT::Errors::Subject)
+```
+
+## Custom logger
+
+It's possible to add a custom logger to replace the default behavior. You can add a logger that outputs to a file, for example. (Thanks **[@hugoabonizio](https://github.com/hugoabonizio)**)
+
+```crystal
+log_file = File.open("./jwt.log", "w")
+
+JWT::Logger.instance = Logger.new(log_file)
 ```
 
 ## Specs
