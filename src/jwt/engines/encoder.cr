@@ -1,14 +1,11 @@
-module JWT::Engines
-  class Encoder
-    def initialize(@payload : PayloadTypes, @adapter : AdapterTypes)
-    end
+module JWT::Engines::Encoder
+  extend self
 
-    def generate
-      header = Header.new(@adapter)
-      payload = Payload.new(@payload)
-      signature = @adapter.sign("#{header.generate}.#{payload.generate}")
+  def generate(payload : Hash, adapter : AdapterTypes)
+    header = Header.generate(adapter)
+    payload = Payload.generate(payload)
+    signature = adapter.sign("#{header}.#{payload}")
 
-      "#{header.generate}.#{payload.generate}.#{signature}"
-    end
+    "#{header}.#{payload}.#{signature}"
   end
 end

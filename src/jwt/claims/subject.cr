@@ -1,17 +1,8 @@
-module JWT::Claims
-  class Subject
-    def initialize(@payload : PayloadTypes, @claims : GenericTypes)
-    end
+module JWT::Claims::Subject
+  extend self
 
-    def validate
-      if @payload.has_key?(key)
-        raise Errors::Subject.new("Invalid subject.") unless @claims[key] == @payload[key]
-      end
-    rescue KeyError
-    end
-
-    def key
-      "sub"
-    end
+  def validate(payload : Hash, claims : Hash)
+    raise Errors::Subject.new("Invalid subject.") unless claims["sub"] == payload["sub"]
+  rescue KeyError
   end
 end

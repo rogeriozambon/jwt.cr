@@ -1,10 +1,7 @@
-module JWT
-  class Payload
-    def initialize(@payload : PayloadTypes)
-    end
+module JWT::Payload
+  extend self
 
-    def generate
-      Serializer::B64.encode(Serializer::JSON.encode(@payload))
-    end
+  def generate(payload : Hash)
+    Serializer::B64.encode(Serializer::JSON.encode(payload))
   end
 end

@@ -1,17 +1,8 @@
-module JWT::Claims
-  class Issuer
-    def initialize(@payload : PayloadTypes, @claims : GenericTypes)
-    end
+module JWT::Claims::Issuer
+  extend self
 
-    def validate
-      if @payload.has_key?(key)
-        raise Errors::Issuer.new("Invalid issuer.") unless @claims[key] == @payload[key]
-      end
-    rescue KeyError
-    end
-
-    def key
-      "iss"
-    end
+  def validate(payload : Hash, claims : Hash)
+    raise Errors::Issuer.new("Invalid issuer.") unless claims["iss"] == payload["iss"]
+  rescue KeyError
   end
 end

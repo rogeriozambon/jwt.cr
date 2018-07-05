@@ -1,18 +1,8 @@
-module JWT::Claims
-  class Expiration
-    property now : Int64
+module JWT::Claims::Expiration
+  extend self
 
-    def initialize(@payload : PayloadTypes)
-      @now = Time.now.epoch
-    end
-
-    def validate
-      raise Errors::Expired.new("Token has expired.") if @payload[key].to_s.to_i < @now
-    rescue KeyError
-    end
-
-    def key
-      "exp"
-    end
+  def validate(payload : Hash)
+    raise Errors::Expired.new("Token has expired.") if payload["exp"].to_s.to_i < Time.now.epoch
+  rescue KeyError
   end
 end

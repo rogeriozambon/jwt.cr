@@ -5,11 +5,13 @@ require "./jwt/engines/*"
 require "./jwt/serializers/*"
 
 module JWT
-  def self.encode(payload, adapter)
-    Engines::Encoder.new(payload, adapter).generate
+  extend self
+
+  def encode(payload, adapter)
+    Engines::Encoder.generate(payload, adapter)
   end
 
-  def self.decode(token, adapter, claims : PayloadTypes = {} of String => String)
-    Engines::Decoder.new(token, adapter).generate(claims)
+  def decode(token, adapter, claims : Hash = {} of String => String)
+    Engines::Decoder.generate(token, adapter, claims)
   end
 end

@@ -1,45 +1,24 @@
-module JWT::Engines
-  class Decoder
-    property header : String
-    property payload : String
-    property signature : String
+module JWT::Engines::Decoder
+  extend self
 
-    def initialize(token : String, @adapter : AdapterTypes)
-      @header, @payload, @signature = token.split(".")
-    end
+  def generate(token : String, adapter : AdapterTypes, claims : Hash) : Tuple
+    header, payload, signature = token.split(".")
 
-    def generate(claims) : Tuple
-      raise Errors::Verification.new("Signature is invalid.") unless isValid?
+    raise Errors::Verification.new("Signature is invalid.") unless signature == adapter.sign("#{header}.#{payload}")
 
-      validations(claims).map {|claim| claim.validate}
+    header = Serializer::JSON.decode(Serializer::B64.decode(header))
+    payload = Serializer::JSON.decode(Serializer::B64.decode(payload))
 
-      {header, payload}
-    rescue Base64::Error
-      raise Errors::Decode.new("Invalid Base64.")
-    rescue JSON::ParseException
-      raise Errors::Decode.new("Invalid JSON.")
-    end
+    Claims::Audience.validate(payload, claims)
+    Claims::Expiration.validate(payload.as_h)
+    Claims::Issuer.validate(payload.as_h, claims)
+    Claims::NotBefore.validate(payload.as_h)
+    Claims::Subject.validate(payload.as_h, claims)
 
-    private def isValid?
-      @signature == @adapter.sign("#{@header}.#{@payload}")
-    end
-
-    private def validations(claims)
-      [
-        Claims::Audience.new(payload, claims),
-        Claims::Expiration.new(payload),
-        Claims::Issuer.new(payload, claims),
-        Claims::NotBefore.new(payload),
-        Claims::Subject.new(payload, claims)
-      ]
-    end
-
-    private def header
-      Serializer::JSON.decode(Serializer::B64.decode(@header)).as_h
-    end
-
-    private def payload
-      Serializer::JSON.decode(Serializer::B64.decode(@payload)).as_h
-    end
+    {header, payload}
+  rescue Base64::Error
+    raise Errors::Decode.new("Invalid Base64.")
+  rescue JSON::ParseException
+    raise Errors::Decode.new("Invalid JSON.")
   end
 end
